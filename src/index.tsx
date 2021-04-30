@@ -1,9 +1,50 @@
 import ReactDOM from 'react-dom';
+import { useState, useEffect, useRef } from 'react';
+import * as esbuild from 'esbuild-wasm';
+import { unpkgPathPlugin } from './plugins/unpkge-path-plugin';
 
 const App = () => {
+  const [input, setInput] = useState('');
+  const [code, setCode] = useState('');
+  const ref = useRef<any>();
+
+  const startService = async () => {
+    ref.current = await esbuild.startService({
+      worker: true,
+      wasmURL: '/esbuild.wasm',
+    });
+    // console.log(service);
+  };
+
+  useEffect(() => {
+    startService();
+  }, []);
+
+  const onClick = async () => {
+    if (!ref.current) {
+      return;
+    }
+
+    const result = await ref.current.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin()],
+    });
+
+    console.log(result.outputFiles[0].text);
+  };
+
   return (
     <>
-      <h1>Application</h1>
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}></textarea>
+
+      <div>
+        <button onClick={onClick}>submit</button>
+      </div>
+      <pre>{code}</pre>
     </>
   );
 };
