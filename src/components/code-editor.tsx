@@ -28,7 +28,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         minimap: { enabled: false },
         showUnused: false,
         folding: false,
-        lineNumbersMiniChars: 3,
+        lineNumbersMinChars: 3,
         fontSize: 16,
         scrollBeyondLastLine: false,
         automaticLayout: true,
