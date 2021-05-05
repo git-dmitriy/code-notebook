@@ -6,7 +6,6 @@ import { fetchPlugin } from './plugins/fetch-plugin';
 
 const App = () => {
   const [input, setInput] = useState('');
-  const [code, setCode] = useState('');
   const ref = useRef<any>();
   const iframe = useRef<any>();
 
@@ -66,16 +65,18 @@ const App = () => {
 
   return (
     <>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}></textarea>
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} />
 
       <div>
         <button onClick={onClick}>submit</button>
       </div>
-      <pre>{code}</pre>
 
-      <iframe ref={iframe} sandbox='allow-scripts' srcDoc={html} />
+      <iframe
+        title='preview'
+        ref={iframe}
+        sandbox='allow-scripts'
+        srcDoc={html}
+      />
     </>
   );
 };
