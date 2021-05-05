@@ -26,6 +26,8 @@ const App = () => {
       return;
     }
 
+    iframe.current.srcdoc = html;
+
     const result = await ref.current.build({
       entryPoints: ['index.js'],
       bundle: true,
@@ -40,7 +42,7 @@ const App = () => {
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
 
-  const HTML = `
+  const html = `
     <html>
     <head>
     </head>
@@ -56,7 +58,6 @@ const App = () => {
               '<div style="color:red"><h1>Runtime Error</h1><div>' + err + '</div></div>';
             console.error(err);
           }
-          
         }, false);
       </script>
     </body>
@@ -74,7 +75,7 @@ const App = () => {
       </div>
       <pre>{code}</pre>
 
-      <iframe ref={iframe} sandbox='allow-scripts' srcDoc={HTML} />
+      <iframe ref={iframe} sandbox='allow-scripts' srcDoc={html} />
     </>
   );
 };
