@@ -1,8 +1,13 @@
 import MonacoEditor from '@monaco-editor/react';
 
-export const CodeEditor = () => {
+interface CodeEditorProps {
+  initialValue: string;
+}
+
+export const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue }) => {
   return (
     <MonacoEditor
+      value={initialValue}
       language='javascript'
       theme='dark'
       options={{
