@@ -79,7 +79,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           scrollBeyondLastLine: false,
           automaticLayout: true,
         }}
-        height='500px'
+        height='100%'
       />
     </div>
   );
