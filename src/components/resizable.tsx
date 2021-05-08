@@ -10,7 +10,12 @@ export const Resizable: React.FC<ResizableProps> = ({
   children,
 }) => {
   return (
-    <ResizableBox width={Infinity} height={300} resizeHandles={['s']}>
+    <ResizableBox
+      width={Infinity}
+      height={300}
+      resizeHandles={['s']}
+      maxConstraints={[Infinity, window.innerHeight * 0.9]}
+      minConstraints={[Infinity, 35]}>
       {children}
     </ResizableBox>
   );
