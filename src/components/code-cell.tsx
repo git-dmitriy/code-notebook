@@ -17,7 +17,10 @@ export const CodeCell = () => {
   return (
     <Resizable direction='vertical'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        <CodeEditor initialValue='' onChange={(value) => setInput(value)} />
+        <Resizable direction='horizontal'>
+          <CodeEditor initialValue='' onChange={(value) => setInput(value)} />
+        </Resizable>
+
         <Preview code={code} />
       </div>
     </Resizable>
