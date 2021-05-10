@@ -4,6 +4,7 @@ import './text-editor.css';
 
 export const TextEditor: React.FC = () => {
   const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState('# Header');
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,7 +28,12 @@ export const TextEditor: React.FC = () => {
   if (editing) {
     return (
       <div className='text-editor' ref={ref}>
-        <MDEditor />
+        <MDEditor
+          value={value}
+          onChange={(v) => {
+            setValue(v || '');
+          }}
+        />
       </div>
     );
   }
@@ -38,7 +44,7 @@ export const TextEditor: React.FC = () => {
       onClick={() => {
         setEditing(true);
       }}>
-      <MDEditor.Markdown source='# header' />
+      <MDEditor.Markdown source={value} />
     </div>
   );
 };
