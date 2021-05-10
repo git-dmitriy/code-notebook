@@ -26,7 +26,7 @@ export const TextEditor: React.FC = () => {
 
   if (editing) {
     return (
-      <div ref={ref}>
+      <div className='text-editor' ref={ref}>
         <MDEditor />
       </div>
     );
@@ -34,6 +34,7 @@ export const TextEditor: React.FC = () => {
 
   return (
     <div
+      className='text-editor'
       onClick={() => {
         setEditing(true);
       }}>
