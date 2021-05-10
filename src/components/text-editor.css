@@ -3,3 +3,7 @@
   font-weight: unset;
   line-height: unset;
 }
+
+.w-md-editor ul {
+  line-height: 1;
+}
