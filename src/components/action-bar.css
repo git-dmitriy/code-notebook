@@ -1,0 +1,21 @@
+.action-bar-code-wrapper {
+  background-color: #37414b;
+}
+
+.action-bar-text-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0.25;
+  transition: opacity .3s;
+}
+
+.action-bar:hover {
+  opacity: 1;
+}
