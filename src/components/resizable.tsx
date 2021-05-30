@@ -34,7 +34,7 @@ export const Resizable: React.FC<ResizableProps> = ({
     return () => {
       window.removeEventListener('resize', listener);
     };
-  }, []);
+  }, [width]);
 
   let resizableProps: ResizableBoxProps;
 
