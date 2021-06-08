@@ -1,8 +1,9 @@
-import { Command } from "commander";
+import { Command } from 'commander';
 
 export const serveCommand = new Command()
-  .command("serve")
-  .description("Open file for editing")
-  .action(() => {
-    console.log("Getting ready to serve a file");
+  .command('serve [filename]')
+  .description('Open file for editing')
+  .option('-p, --port <number>', 'port to run server on', '4005')
+  .action((filename = 'notebook.js', options) => {
+    console.log(filename, options);
   });
