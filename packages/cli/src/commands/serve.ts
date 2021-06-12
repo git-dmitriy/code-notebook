@@ -6,7 +6,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 export const serveCommand = new Command()
   .command('serve [filename]')
-  .description('Open file for editing')
+  .description('Open a file for editing')
   .option('-p, --port <number>', 'port to run server on', '4005')
   .action(async (filename = 'notebook.js', options: { port: string }) => {
     try {
@@ -18,15 +18,13 @@ export const serveCommand = new Command()
         !isProduction
       );
       console.log(
-        `Opened ${filename}/ Navigate http://localhost:${options.port} to edit the file.`
+        `Opened ${filename}. Navigate to http://localhost:${options.port} to edit the file.`
       );
     } catch (err) {
       if (err.code === 'EADDRINUSE') {
-        console.log(
-          `Port ${options.port} is in use. Try running on a different port.`
-        );
+        console.error('Port is in use. Try running on a different port.');
       } else {
-        console.log('Have a problem:', err.message);
+        console.log('Heres the problem', err.message);
       }
       process.exit(1);
     }
