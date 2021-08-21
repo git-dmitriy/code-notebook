@@ -25,7 +25,8 @@ Markdown editor for creating documentation sections and code editor for writing 
 1. Install dependencies
 
    ```bash
-   npm run build
+   npm install
+   npx lerna bootstrap
    ```
 
 2. Run app
