@@ -1,5 +1,7 @@
 # Code notebook
 
+This is a large learning project done by me on the Stephen Grider course.
+
 **Code-notebook** is a development environment for writing and documenting JavaScript code inside the browser.
 Markdown editor for creating documentation sections and code editor for writing and executing JavaScript code
 
@@ -36,7 +38,3 @@ Markdown editor for creating documentation sections and code editor for writing 
    ```
 
 3. Open [localhost:4005](http://localhost:4005/)
-
----
-
-_The project is under development._
