@@ -1,59 +1,64 @@
-import { useEffect, useState, useRef } from 'react';
+import {useEffect, useState, useRef} from 'react';
 import MDEditor from '@uiw/react-md-editor';
-import { Cell } from '../state';
-import { useActions } from '../hooks/use-actions';
+import '@uiw/react-md-editor/markdown-editor.css';
+import {Cell} from '../state';
+import {useActions} from '../hooks/use-actions';
 import './text-editor.css';
 
 interface TextEditorProps {
-  cell: Cell;
+    cell: Cell;
 }
 
-export const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
-  const [editing, setEditing] = useState(false);
-  const { updateCell } = useActions();
+export const TextEditor: React.FC<TextEditorProps> = ({cell}) => {
+    const [editing, setEditing] = useState(false);
+    const {updateCell} = useActions();
 
-  const ref = useRef<HTMLDivElement | null>(null);
+    const ref = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const listener = (event: MouseEvent) => {
-      if (
-        ref.current &&
-        event.target &&
-        ref.current.contains(event.target as Node)
-      ) {
-        return;
-      }
-      setEditing(false);
-    };
-    document.addEventListener('click', listener, { capture: true });
+    useEffect(() => {
+        const listener = (event: MouseEvent) => {
+            if (
+                ref.current &&
+                event.target &&
+                ref.current.contains(event.target as Node)
+            ) {
+                return;
+            }
+            setEditing(false);
+        };
+        document.addEventListener('click', listener, {capture: true});
 
-    return () => {
-      document.removeEventListener('click', listener, { capture: true });
-    };
-  }, []);
+        return () => {
+            document.removeEventListener('click', listener, {capture: true});
+        };
+    }, []);
 
-  if (editing) {
+    if (editing) {
+        return (
+            <div className='text-editor' ref={ref} data-color-mode='dark'>
+                <MDEditor
+                    value={cell.content}
+                    onChange={(v) => {
+                        updateCell(cell.id, v || '');
+                    }}
+                />
+            </div>
+        );
+    }
+
     return (
-      <div className='text-editor' ref={ref}>
-        <MDEditor
-          value={cell.content}
-          onChange={(v) => {
-            updateCell(cell.id, v || '');
-          }}
-        />
-      </div>
+        <div
+            className='text-editor card'
+            data-color-mode='dark'
+            onClick={() => {
+                setEditing(true);
+            }}>
+            <div className='card-content'>
+                <MDEditor.Markdown
+                    source={cell.content || 'Click to edit'}
+                    style={{background: 'transparent'}}
+                />
+            </div>
+        </div>
     );
-  }
-
-  return (
-    <div
-      className='text-editor card'
-      onClick={() => {
-        setEditing(true);
-      }}>
-      <div className='card-content'>
-        <MDEditor.Markdown source={cell.content || 'Click to edit'} />
-      </div>
-    </div>
-  );
 };
