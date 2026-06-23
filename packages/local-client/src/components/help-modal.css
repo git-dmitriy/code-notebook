@@ -1,0 +1,21 @@
+.help-modal__card {
+    width: 90%;
+    max-width: 720px;
+}
+
+.help-modal__body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.help-modal__section {
+    margin-bottom: 24px;
+}
+
+.help-modal__section:last-child {
+    margin-bottom: 0;
+}
+
+.help-modal__section-title {
+    margin-bottom: 8px;
+}

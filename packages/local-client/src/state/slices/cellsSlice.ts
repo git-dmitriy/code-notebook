@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {CODE_CELL_TEMPLATE} from '../../content/notebook-guide';
 import {Cell, CellType, getRandomId} from '../cell';
 
 export type Direction = 'up' | 'down';
@@ -29,8 +30,12 @@ const cellsSlice = createSlice({
             state,
             action: PayloadAction<{ id: string | null; type: CellType }>
         ) => {
+            const isFirstCodeCell =
+                action.payload.type === 'code' &&
+                !Object.values(state.data).some((c) => c.type === 'code');
+
             const cell: Cell = {
-                content: '',
+                content: isFirstCodeCell ? CODE_CELL_TEMPLATE : '',
                 type: action.payload.type,
                 id: getRandomId(),
             };
