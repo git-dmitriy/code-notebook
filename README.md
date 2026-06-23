@@ -1,26 +1,42 @@
-# Code notebook
+# Code Notebook
 
-This is a large learning project done by me on the Stephen Grider course.
-
-**Code-notebook** is a development environment for writing and documenting JavaScript code inside the browser.
-Markdown editor for creating documentation sections and code editor for writing and executing JavaScript code
-
----
+A browser-based notebook for JavaScript and React — somewhere between a scratchpad and a lightweight Jupyter. You mix Markdown notes with runnable code cells in one file, saved locally as `notebook.js`.
 
 ![Screenshot of the app](screenshot.jpg)
 
----
+Originally built as a learning project (Stephen Grider's course) and later updated to a modern stack: React 19, Vite, Redux Toolkit, with esbuild running entirely in the browser.
+
+## How it works
+
+The notebook is made of **cells**:
+
+- **Text** — Markdown documentation; click to edit
+- **Code** — JavaScript/JSX with Monaco on the left and a live preview on the right
+
+Code runs in a sandboxed iframe. To see output, call `show(<Component />)`. Variables from earlier code cells carry over to later ones, similar to Jupyter.
+
+You can `import` npm packages (e.g. `axios`) — they're fetched from unpkg and bundled client-side with esbuild-wasm.
+
+On first launch you get a short welcome guide; the full reference is under **Help** in the header.
 
 ## Features
 
-- [ESBuild](https://esbuild.github.io/) to transpile and bundle all the code directly in the browser
-- Custom plugins for ESBuild (to get packages from unpkg.com and correctly bundle them inside the browser: one plugin changes the paths to the npm packages and another set the appropriate content)
-- Monaco Text Editor ([@monaco-editor/react](https://www.npmjs.com/package/@monaco-editor/react))
-- [Prettier](https://www.npmjs.com/package/prettier) to format the user's code
-- [Markdown Editor](https://www.npmjs.com/package/@uiw/react-md-editor) to handle text snippets
-- [bulmaswatch/superhero](https://jenil.github.io/bulmaswatch/superhero/) theme for styling
-- State Managament: [Redux](https://github.com/reduxjs/react-redux), [Immer](https://github.com/immerjs/immer#readme), [Thunk](https://github.com/reduxjs/redux-thunk)
-- [Lerna](https://github.com/lerna/lerna) to handle all packages
+- [esbuild-wasm](https://esbuild.github.io/) — transpile and bundle code in the browser
+- Custom esbuild plugins for loading npm packages from [unpkg.com](https://unpkg.com)
+- [Monaco Editor](https://www.npmjs.com/package/@monaco-editor/react) for code cells
+- [Prettier](https://www.npmjs.com/package/prettier) formatting
+- [Markdown editor](https://www.npmjs.com/package/@uiw/react-md-editor) for text cells
+- [Bulmaswatch Superhero](https://jenil.github.io/bulmaswatch/superhero/) theme
+- [Redux Toolkit](https://redux-toolkit.js.org/) for state management
+- npm workspaces monorepo (`local-client`, `local-api`, `cli`)
+
+## Tech stack
+
+React 19 · Vite · Redux Toolkit · TypeScript 5 · Express
+
+## Requirements
+
+- Node.js 20+
 
 ## Getting started
 
@@ -28,13 +44,23 @@ Markdown editor for creating documentation sections and code editor for writing 
 
    ```bash
    npm install
-   npx lerna bootstrap
    ```
 
-2. Run app
+2. Run the app
 
    ```bash
    npm run start
    ```
 
-3. Open [localhost:4005](http://localhost:4005/)
+   This starts:
+   - Vite dev server on [localhost:5173](http://localhost:5173)
+   - Express API + proxy on [localhost:4005](http://localhost:4005)
+
+3. Open [localhost:4005](http://localhost:4005/) to use the notebook
+
+## Production build
+
+```bash
+npm run build -w local-client
+NODE_ENV=production node packages/cli/dist/index.js serve
+```

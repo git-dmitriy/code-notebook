@@ -1,0 +1,18 @@
+.welcome-guide {
+    margin-bottom: 16px;
+}
+
+.welcome-guide__message {
+    margin-bottom: 0;
+}
+
+.welcome-guide__body {
+    background-color: rgba(10, 10, 20, 0.6);
+}
+
+.welcome-guide__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}

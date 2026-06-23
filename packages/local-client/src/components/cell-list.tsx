@@ -1,35 +1,42 @@
-import { Fragment, useEffect } from 'react';
-import { useTypedSelector } from '../hooks/use-typed-selector';
-import { CellListItem } from './cell-list-item';
+import {Fragment, useEffect} from 'react';
+import {useTypedSelector} from '../hooks/use-typed-selector';
+import {useWelcomeDismissed} from '../hooks/use-welcome-dismissed';
+import {selectOrderedCells} from '../state/selectors';
+import {CellListItem} from './cell-list-item';
+import {WelcomeGuide} from './welcome-guide';
 import AddCell from './add-cell';
 import './cell-list.css';
-import { useActions } from '../hooks/use-actions';
+import {useActions} from '../hooks/use-actions';
 
-export const CellList: React.FC = () => {
-  const cells = useTypedSelector(({ cells: { order, data } }) =>
-    order.map((id) => data[id])
-  );
+interface CellListProps {
+    onOpenHelp?: () => void;
+}
 
-  const { fetchCells } = useActions();
+export const CellList: React.FC<CellListProps> = ({onOpenHelp}) => {
+    const cells = useTypedSelector(selectOrderedCells);
+    const {dismissed, dismiss} = useWelcomeDismissed();
 
-  useEffect(() => {
-    fetchCells();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const {fetchCells} = useActions();
 
-  const renderedCells = cells.map((cell) => (
-    <Fragment key={cell.id}>
-      <CellListItem cell={cell} />
-      <AddCell previousCellId={cell.id} />
-    </Fragment>
-  ));
-  return (
-    <div className="cell-list">
-      <AddCell
-        forceVisible={renderedCells.length === 0}
-        previousCellId={null}
-      />
-      {renderedCells}
-    </div>
-  );
+    useEffect(() => {
+        fetchCells();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const renderedCells = cells.map((cell) => (
+        <Fragment key={cell.id}>
+            <CellListItem cell={cell}/>
+            <AddCell previousCellId={cell.id}/>
+        </Fragment>
+    ));
+
+    return (
+        <div className="cell-list">
+            {cells.length === 0 && !dismissed && onOpenHelp && (
+                <WelcomeGuide onDismiss={dismiss} onOpenHelp={onOpenHelp}/>
+            )}
+            <AddCell forceVisible={renderedCells.length === 0} previousCellId={null}/>
+            {renderedCells}
+        </div>
+    );
 };

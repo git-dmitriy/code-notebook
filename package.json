@@ -1,11 +1,18 @@
 {
   "name": "root",
   "private": true,
-  "devDependencies": {
-    "lerna": "^3.22.1"
+  "engines": {
+    "node": ">=20"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "lerna bootstrap",
-    "start": "lerna run start --parallel"
+    "build:packages": "npm run build -w local-api && npm run build -w cli",
+    "postinstall": "npm run build:packages",
+    "start": "concurrently -n api,client,cli -c blue,green,yellow \"npm run start -w local-api\" \"npm run start -w local-client\" \"npm run start -w cli\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }

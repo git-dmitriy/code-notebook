@@ -1,0 +1,1 @@
+[{"id":"test1","type":"code","content":"function SmallButton() {\n  const handleClick = () => console.log('Кнопка нажата!');\n  return (\n    <button onClick={handleClick} style={{ padding: '8px 16px' }}>\n      Нажми меня\n    </button>\n  );\n}\nshow(<SmallButton />);"}]

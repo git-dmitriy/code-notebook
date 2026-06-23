@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "build": "tsc",
     "start": "tsc --preserveWatchOutput && node dist/index.js serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,11 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^7.2.0",
+    "commander": "^12.1.0",
     "local-api": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^15.12.2",
-    "typescript": "^4.3.2"
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
   }
 }
