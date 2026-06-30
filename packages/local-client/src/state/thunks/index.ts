@@ -12,6 +12,7 @@ import {
     fetchCellsError,
     fetchCellsStart,
     saveCellsError,
+    clearCellsError,
 } from '../slices/cellsSlice';
 
 export const createBundle = createAsyncThunk(
@@ -41,8 +42,8 @@ export const fetchCells = createAsyncThunk(
             dispatch(fetchCellsComplete(data));
             return data;
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : 'Unknown error';
-            dispatch(fetchCellsError(message));
+            const detail = err instanceof Error ? err.message : 'Unknown error';
+            dispatch(fetchCellsError(`Could not load notebook: ${detail}`));
             throw err;
         }
     }
@@ -58,9 +59,10 @@ export const saveCells = createAsyncThunk(
 
         try {
             await axios.post('/cells', {cells});
+            dispatch(clearCellsError());
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : 'Unknown error';
-            dispatch(saveCellsError(message));
+            const detail = err instanceof Error ? err.message : 'Unknown error';
+            dispatch(saveCellsError(`Could not save notebook: ${detail}`));
             throw err;
         }
     }

@@ -14,9 +14,11 @@ interface CellListProps {
 
 export const CellList: React.FC<CellListProps> = ({onOpenHelp}) => {
     const cells = useTypedSelector(selectOrderedCells);
+    const loading = useTypedSelector((state) => state.cells.loading);
+    const error = useTypedSelector((state) => state.cells.error);
     const {dismissed, dismiss} = useWelcomeDismissed();
 
-    const {fetchCells} = useActions();
+    const {fetchCells, clearCellsError} = useActions();
 
     useEffect(() => {
         fetchCells();
@@ -30,9 +32,36 @@ export const CellList: React.FC<CellListProps> = ({onOpenHelp}) => {
         </Fragment>
     ));
 
+    const showWelcome =
+        cells.length === 0 && !loading && !error && !dismissed && onOpenHelp;
+
     return (
         <div className="cell-list">
-            {cells.length === 0 && !dismissed && onOpenHelp && (
+            {loading && cells.length === 0 && (
+                <div className="notification is-info is-light cells-status">
+                    Loading notebook…
+                </div>
+            )}
+
+            {error && (
+                <div className="notification is-danger cells-status">
+                    <button
+                        type="button"
+                        className="delete"
+                        aria-label="Dismiss"
+                        onClick={clearCellsError}
+                    />
+                    <p className="cells-status__message">{error}</p>
+                    <button
+                        type="button"
+                        className="button is-small is-danger is-light"
+                        onClick={fetchCells}>
+                        Retry
+                    </button>
+                </div>
+            )}
+
+            {showWelcome && (
                 <WelcomeGuide onDismiss={dismiss} onOpenHelp={onOpenHelp}/>
             )}
             <AddCell forceVisible={renderedCells.length === 0} previousCellId={null}/>

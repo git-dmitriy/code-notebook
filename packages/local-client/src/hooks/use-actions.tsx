@@ -1,6 +1,7 @@
 import {useMemo} from 'react';
 import {
     createBundle,
+    clearCellsError,
     deleteCell,
     fetchCells,
     insertCellAfter,
@@ -24,6 +25,7 @@ export const useActions = () => {
             createBundle: (cellId: string, input: string) =>
                 dispatch(createBundle({cellId, input})),
             fetchCells: () => dispatch(fetchCells()),
+            clearCellsError: () => dispatch(clearCellsError()),
         }),
         [dispatch]
     );
