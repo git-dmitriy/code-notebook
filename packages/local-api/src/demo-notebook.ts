@@ -16,8 +16,9 @@ A browser-based notebook for **JavaScript** and **React** — edit the cells bel
 - **Code cells** — runnable JSX with instant preview
 - **Cumulative execution** — variables from earlier code cells are available later
 - **npm imports** — packages load from [unpkg](https://unpkg.com) in the browser
+- **Demo mode** — edits are saved locally in your browser only
 
-Try the **Increment** button below, or edit any cell to make this notebook yours.`,
+Try the **Increment** button below, or edit any cell to explore the notebook.`,
     },
     {
         id: 'demo-hello',

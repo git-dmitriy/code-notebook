@@ -77,4 +77,6 @@ This project runs as a **Web Service** (Node.js), not a static site.
    - **Start Command:** `npm run start:prod`
 3. Set `NODE_ENV=production` (included in `render.yaml`)
 
-On the free plan the service sleeps after inactivity and notebook data on disk may be lost after redeploy or restart.
+Production deploy uses **read-only demo mode** (`READ_ONLY_DEMO` / `VITE_READ_ONLY_DEMO` in `render.yaml`): the server always serves the canonical demo notebook, visitor edits are stored in the browser's local storage only, and **Reset demo** restores the default content.
+
+On the free plan the service sleeps after inactivity; demo content is served from the app bundle, not from disk.

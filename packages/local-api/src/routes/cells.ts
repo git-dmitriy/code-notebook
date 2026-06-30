@@ -1,13 +1,15 @@
 import express from 'express';
+import {DEMO_NOTEBOOK} from '../demo-notebook';
 import fs from 'fs/promises';
 import path from 'path';
-import {DEMO_NOTEBOOK} from '../demo-notebook';
 
 interface Cell {
     id: string;
     content: string;
     type: 'text' | 'code';
 }
+
+const isReadOnlyDemo = () => process.env.READ_ONLY_DEMO === 'true';
 
 function isNodeError(err: unknown): err is NodeJS.ErrnoException {
     return err instanceof Error && 'code' in err;
@@ -40,6 +42,11 @@ export const createCellsRouter = (filename: string, dir: string) => {
     const fullPath = path.join(dir, filename);
 
     router.get('/cells', async (req, res) => {
+        if (isReadOnlyDemo()) {
+            res.send(DEMO_NOTEBOOK);
+            return;
+        }
+
         try {
             const result = await fs.readFile(fullPath, {encoding: 'utf-8'});
 
@@ -64,6 +71,11 @@ export const createCellsRouter = (filename: string, dir: string) => {
     });
 
     router.post('/cells', async (req, res) => {
+        if (isReadOnlyDemo()) {
+            res.status(403).json({error: 'Notebook is read-only in demo mode'});
+            return;
+        }
+
         const {cells}: { cells: Cell[] } = req.body;
         await fs.writeFile(fullPath, JSON.stringify(cells), 'utf-8');
         res.send({status: 'ok'});

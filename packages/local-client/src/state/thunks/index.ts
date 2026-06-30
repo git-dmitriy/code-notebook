@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import bundle from '../../bundler';
+import {isReadOnlyDemo} from '../../config/demo-mode';
+import {loadDraft, saveDraft} from '../../storage/notebook-draft';
 import {Cell} from '../cell';
 import {RootState} from '../store';
 import {
@@ -39,8 +41,9 @@ export const fetchCells = createAsyncThunk(
         dispatch(fetchCellsStart());
         try {
             const {data}: { data: Cell[] } = await axios.get('/cells');
-            dispatch(fetchCellsComplete(data));
-            return data;
+            const cells = isReadOnlyDemo() ? loadDraft() ?? data : data;
+            dispatch(fetchCellsComplete(cells));
+            return cells;
         } catch (err: unknown) {
             const detail = err instanceof Error ? err.message : 'Unknown error';
             dispatch(fetchCellsError(`Could not load notebook: ${detail}`));
@@ -56,6 +59,12 @@ export const saveCells = createAsyncThunk(
             cells: {data, order},
         } = getState() as RootState;
         const cells = order.map((id) => data[id]);
+
+        if (isReadOnlyDemo()) {
+            saveDraft(cells);
+            dispatch(clearCellsError());
+            return;
+        }
 
         try {
             await axios.post('/cells', {cells});

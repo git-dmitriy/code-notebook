@@ -10,3 +10,7 @@ services:
         value: production
       - key: NODE_VERSION
         value: "20"
+      - key: READ_ONLY_DEMO
+        value: "true"
+      - key: VITE_READ_ONLY_DEMO
+        value: "true"
