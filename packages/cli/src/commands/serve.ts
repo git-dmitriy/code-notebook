@@ -8,21 +8,30 @@ function isNodeError(err: unknown): err is NodeJS.ErrnoException {
     return err instanceof Error && 'code' in err;
 }
 
+function resolvePort(cliPort: string): number {
+    if (process.env.PORT) {
+        return parseInt(process.env.PORT, 10);
+    }
+    return parseInt(cliPort, 10);
+}
+
 export const serveCommand = new Command()
     .command('serve [filename]')
     .description('Open a file for editing')
     .option('-p, --port <number>', 'port to run server on', '4005')
     .action(async (filename = 'notebook.js', options: { port: string }) => {
+        const port = resolvePort(options.port);
+
         try {
             const dir = path.join(process.cwd(), path.dirname(filename));
             await serve(
-                parseInt(options.port),
+                port,
                 path.basename(filename),
                 dir,
                 !isProduction
             );
             console.log(
-                `Opened ${filename}. Navigate to http://localhost:${options.port} to edit the file.`
+                `Opened ${filename}. Navigate to http://localhost:${port} to edit the file.`
             );
         } catch (err: unknown) {
             if (isNodeError(err) && err.code === 'EADDRINUSE') {

@@ -61,6 +61,20 @@ React 19 · Vite · Redux Toolkit · TypeScript 5 · Express
 ## Production build
 
 ```bash
-npm run build -w local-client
-NODE_ENV=production node packages/cli/dist/index.js serve
+npm run build
+npm run start:prod
 ```
+
+Open http://localhost:4005 (or the port set via `PORT`).
+
+## Deploy on Render
+
+This project runs as a **Web Service** (Node.js), not a static site.
+
+1. Connect the GitHub repo on [Render](https://render.com)
+2. Render reads [`render.yaml`](render.yaml) automatically, or set manually:
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `npm run start:prod`
+3. Set `NODE_ENV=production` (included in `render.yaml`)
+
+On the free plan the service sleeps after inactivity and notebook data on disk may be lost after redeploy or restart.
