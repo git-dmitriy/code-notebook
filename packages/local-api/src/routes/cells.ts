@@ -1,6 +1,7 @@
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
+import {DEMO_NOTEBOOK} from '../demo-notebook';
 
 interface Cell {
     id: string;
@@ -25,8 +26,12 @@ export const createCellsRouter = (filename: string, dir: string) => {
             res.send(JSON.parse(result));
         } catch (err: unknown) {
             if (isNodeError(err) && err.code === 'ENOENT') {
-                await fs.writeFile(fullPath, '[]', 'utf-8');
-                res.send([]);
+                await fs.writeFile(
+                    fullPath,
+                    JSON.stringify(DEMO_NOTEBOOK),
+                    'utf-8'
+                );
+                res.send(DEMO_NOTEBOOK);
             } else {
                 throw err;
             }
