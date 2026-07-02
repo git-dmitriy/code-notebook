@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import bundle from '../../bundler';
+import {isReadOnlyDemo} from '../../config/demo-mode';
+import {loadDraft, saveDraft} from '../../storage/notebook-draft';
 import {Cell} from '../cell';
 import {RootState} from '../store';
 import {
@@ -12,6 +14,7 @@ import {
     fetchCellsError,
     fetchCellsStart,
     saveCellsError,
+    clearCellsError,
 } from '../slices/cellsSlice';
 
 export const createBundle = createAsyncThunk(
@@ -38,11 +41,12 @@ export const fetchCells = createAsyncThunk(
         dispatch(fetchCellsStart());
         try {
             const {data}: { data: Cell[] } = await axios.get('/cells');
-            dispatch(fetchCellsComplete(data));
-            return data;
+            const cells = isReadOnlyDemo() ? loadDraft() ?? data : data;
+            dispatch(fetchCellsComplete(cells));
+            return cells;
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : 'Unknown error';
-            dispatch(fetchCellsError(message));
+            const detail = err instanceof Error ? err.message : 'Unknown error';
+            dispatch(fetchCellsError(`Could not load notebook: ${detail}`));
             throw err;
         }
     }
@@ -56,11 +60,18 @@ export const saveCells = createAsyncThunk(
         } = getState() as RootState;
         const cells = order.map((id) => data[id]);
 
+        if (isReadOnlyDemo()) {
+            saveDraft(cells);
+            dispatch(clearCellsError());
+            return;
+        }
+
         try {
             await axios.post('/cells', {cells});
+            dispatch(clearCellsError());
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : 'Unknown error';
-            dispatch(saveCellsError(message));
+            const detail = err instanceof Error ? err.message : 'Unknown error';
+            dispatch(saveCellsError(`Could not save notebook: ${detail}`));
             throw err;
         }
     }

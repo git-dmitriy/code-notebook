@@ -9,8 +9,10 @@
   ],
   "scripts": {
     "build:packages": "npm run build -w local-api && npm run build -w cli",
+    "build": "npm run build:packages && npm run build -w local-client",
     "postinstall": "npm run build:packages",
-    "start": "concurrently -n api,client,cli -c blue,green,yellow \"npm run start -w local-api\" \"npm run start -w local-client\" \"npm run start -w cli\""
+    "start": "concurrently -n api,client,cli -c blue,green,yellow \"npm run start -w local-api\" \"npm run start -w local-client\" \"npm run start -w cli\"",
+    "start:prod": "NODE_ENV=production node packages/cli/dist/index.js serve"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

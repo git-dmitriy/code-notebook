@@ -3,23 +3,25 @@ import type {RootState} from './store';
 import {preprocessCellContent} from './preprocess-code';
 
 const showFunc = `
+    var previewRoot = null;
     var show = (value) => {
       const container = document.querySelector('#root');
       if (!container) return;
 
-      if (typeof value === 'object' && value !== null && value.$$typeof && value.props) {
-        ReactDOM.render(value, container);
-      } else if (typeof value === 'object' && value !== null) {
-        ReactDOM.render(
-          React.createElement('pre', null, JSON.stringify(value, null, 2)),
-          container
-        );
-      } else {
-        ReactDOM.render(
-          React.createElement('pre', null, String(value)),
-          container
-        );
+      if (!previewRoot) {
+        previewRoot = ReactDOM.createRoot(container);
       }
+
+      var element;
+      if (typeof value === 'object' && value !== null && value.$$typeof && value.props) {
+        element = value;
+      } else if (typeof value === 'object' && value !== null) {
+        element = React.createElement('pre', null, JSON.stringify(value, null, 2));
+      } else {
+        element = React.createElement('pre', null, String(value));
+      }
+
+      previewRoot.render(element);
     };
     `;
 

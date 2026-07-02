@@ -88,6 +88,9 @@ const cellsSlice = createSlice({
         saveCellsError: (state, action: PayloadAction<string>) => {
             state.error = action.payload;
         },
+        clearCellsError: (state) => {
+            state.error = null;
+        },
     },
 });
 
@@ -100,6 +103,7 @@ export const {
     fetchCellsComplete,
     fetchCellsError,
     saveCellsError,
+    clearCellsError,
 } = cellsSlice.actions;
 
 export default cellsSlice.reducer;

@@ -10,6 +10,12 @@ interface BundlesState {
     [key: string]: Bundle | undefined;
 }
 
+interface CreateBundleRejectedAction {
+    type: 'bundles/createBundle/rejected';
+    meta: { arg: { cellId: string } };
+    error: { message?: string };
+}
+
 const initialState: BundlesState = {};
 
 const bundlesSlice = createSlice({
@@ -36,6 +42,20 @@ const bundlesSlice = createSlice({
                 err: action.payload.bundle.err,
             };
         },
+    },
+    extraReducers: (builder) => {
+        builder.addMatcher(
+            (action): action is CreateBundleRejectedAction =>
+                action.type === 'bundles/createBundle/rejected',
+            (state, action) => {
+                const cellId = action.meta.arg.cellId;
+                state[cellId] = {
+                    loading: false,
+                    code: '',
+                    err: action.error.message ?? 'Bundle failed',
+                };
+            }
+        );
     },
 });
 

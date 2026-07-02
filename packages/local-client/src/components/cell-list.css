@@ -1,7 +1,15 @@
 .cell-list {
-  margin: 0 25px;
+    margin: 0 25px;
+}
+
+.cells-status {
+    margin-bottom: 16px;
+}
+
+.cells-status__message {
+    margin-bottom: 12px;
 }
 
 .react-draggable-transparent-selection .cell-list {
-  margin-bottom: 100vh;
+    margin-bottom: 100vh;
 }
